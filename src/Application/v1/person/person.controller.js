@@ -1,11 +1,11 @@
-import PlaneModel from './plane.model';
-import CompanyModel from '../company/company.model';
+import PersonModel from './person.model';
+// import PLaneModel from '../plane/plane.model';
 
-export const getAllPlanes = async (req, res) => {
+export const getAllPeople = async (req, res) => {
   const { offset, limit } = req.params;
 
   try {
-    const data = await PlaneModel.find().populate('company', ['name', 'phone']).skip(offset).limit(limit);
+    const data = await PersonModel.find().populate('plane', 'model').skip(offset).limit(limit);
     return res.status(200).json(data);
   } catch (error) {
     console.error(error);
@@ -16,11 +16,11 @@ export const getAllPlanes = async (req, res) => {
   }
 };
 
-export const getPlaneById = async (req, res) => {
-  const { idPlane } = req.params;
+export const getPersonById = async (req, res) => {
+  const { idPerson } = req.params;
 
   try {
-    const data = await PlaneModel.findById(idPlane).populate('company', 'name');
+    const data = await PersonModel.findById(idPerson).populate('plane', 'model');
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).json({
@@ -30,28 +30,28 @@ export const getPlaneById = async (req, res) => {
   }
 };
 
-export const createPlane = async (req, res) => {
+export const createPerson = async (req, res) => {
   const {
-    model,
-    company,
-    problem,
-    diagnostic
+    name,
+    lastname,
+    DUI,
+    plane
   } = req.body;
 
-  if (!model || !company || !problem || !diagnostic) {
+  if (!name || !lastname || !DUI || !plane) {
     return res.status(400).json({
       message:
-        'Faltan datos, la consulta debe contener model, company, problem y diagnostic',
+        'Faltan datos, la consulta debe contener name, lastname, DUI y plane',
       code: 400,
     });
   }
 
   try {
-    const data = await PlaneModel.create({
-      model,
-      company,
-      problem,
-      diagnostic,
+    const data = await PersonModel.create({
+      name,
+      lastname,
+      DUI,
+      plane,
     });
     return res.status(200).json(data);
   } catch (error) {
@@ -63,9 +63,9 @@ export const createPlane = async (req, res) => {
   }
 };
 
-export const updatePlane = async (req, res) => {
+export const updatePerson = async (req, res) => {
   const { body, params } = req;
-  const { idPlane } = params;
+  const { idPerson } = params;
 
   if (!body) {
     return res.status(400).json({
@@ -76,8 +76,8 @@ export const updatePlane = async (req, res) => {
   }
 
   try {
-    const plane = await PlaneModel.findOneAndUpdate({ id: idPlane }, body);
-    return res.status(200).json(Object.assign(plane, body));
+    const person = await PersonModel.findOneAndUpdate({ id: idPerson }, body);
+    return res.status(200).json(Object.assign(person, body));
   } catch (error) {
     console.error(error);
     return res.status(500).json({
@@ -87,19 +87,19 @@ export const updatePlane = async (req, res) => {
   }
 };
 
-export const deletePlane = async (req, res) => {
+export const deletePerson = async (req, res) => {
   const { params } = req;
-  const { idPlane } = params;
+  const { idPerson } = params;
 
   try {
-    const data = await PlaneModel.findOneAndUpdate(
-      { _id: idPlane },
-      { status: 'repaired' }
+    const data = await PersonModel.findOneAndUpdate(
+      { _id: idPerson },
+      { status: 'inactive' }
     );
 
     return res.status(200).json({
       ...data,
-      status: 'repaired',
+      status: 'inactive',
     });
   } catch (error) {
     return res.status(500).json({
