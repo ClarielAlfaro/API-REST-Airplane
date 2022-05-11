@@ -1,11 +1,10 @@
 import PersonModel from './person.model';
-// import PLaneModel from '../plane/plane.model';
 
 export const getAllPeople = async (req, res) => {
   const { offset, limit } = req.params;
 
   try {
-    const data = await PersonModel.find().populate('plane', 'model').skip(offset).limit(limit);
+    const data = await PersonModel.find().skip(offset).limit(limit);
     return res.status(200).json(data);
   } catch (error) {
     console.error(error);
@@ -20,7 +19,7 @@ export const getPersonById = async (req, res) => {
   const { idPerson } = req.params;
 
   try {
-    const data = await PersonModel.findById(idPerson).populate('plane', 'model');
+    const data = await PersonModel.findById(idPerson);
     return res.status(200).json(data);
   } catch (error) {
     return res.status(500).json({
@@ -35,13 +34,12 @@ export const createPerson = async (req, res) => {
     name,
     lastname,
     DUI,
-    plane
   } = req.body;
 
-  if (!name || !lastname || !DUI || !plane) {
+  if (!name || !lastname || !DUI) {
     return res.status(400).json({
       message:
-        'Faltan datos, la consulta debe contener name, lastname, DUI y plane',
+        'Faltan datos, la consulta debe contener name, lastname, y DUI',
       code: 400,
     });
   }
@@ -50,8 +48,7 @@ export const createPerson = async (req, res) => {
     const data = await PersonModel.create({
       name,
       lastname,
-      DUI,
-      plane,
+      DUI
     });
     return res.status(200).json(data);
   } catch (error) {
@@ -69,20 +66,24 @@ export const updatePerson = async (req, res) => {
 
   if (!body) {
     return res.status(400).json({
-      message:
-        'Faltan datos, la consulta debe contener model, company, problem y diagnostic',
-      code: 400,
+      message: 'Hacen faltan campos',
     });
   }
 
   try {
-    const person = await PersonModel.findOneAndUpdate({ id: idPerson }, body);
-    return res.status(200).json(Object.assign(person, body));
+    const data = await PersonModel.findOneAndUpdate(
+      { _id: idPerson },
+      {
+        name: body.name,
+        lastname: body.lastname,
+        DUI: body.DUI
+      }
+    );
+    return res.status(200).json(Object.assign(data, body));
   } catch (error) {
-    console.error(error);
     return res.status(500).json({
-      message: 'Error al obtener los datos',
       code: 500,
+      message: 'No se pudo actualizar el registro',
     });
   }
 };

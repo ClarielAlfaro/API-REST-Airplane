@@ -19,10 +19,6 @@ const schema = new Schema(
       type: String,
       isRequired: true,
     },
-    plane: {
-      type: Schema.Types.ObjectId,
-      ref: 'planes'
-    },
     status: {
       type: String,
       enum: ['active', 'inactive'],

@@ -15,6 +15,10 @@ const schema = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'Companies'
     },
+    person: {
+      type: Schema.Types.ObjectId,
+      ref: 'persons'
+    },
     problem: {
       type: String,
       isRequired: true,
@@ -25,7 +29,7 @@ const schema = new Schema(
     },
     status: {
       type: String,
-      enum: ['repaired', 'unrepaired', 'discarded'],
+      enum: ['repaired', 'unrepaired'],
       default: 'unrepaired',
     },
     created_at: {
