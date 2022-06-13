@@ -2,11 +2,6 @@
 
 My personal npx command for create nodejs package
 
-# ACERCA DE LA API-REST
-
-En esta API se trabaja con una estructura basado en un taller de aviones el cual incorpora 3 modulos los
-cuales son plane, company, y person. 
-
 ## Configuration
 
 Rename .env.example to .env and set APP_DATABASE_URL with your database url

@@ -1,12 +1,16 @@
 import express from 'express';
-import planeRoutes from './plane/plane.route';
-import companyRoutes from './company/company.route';
-import personRoutes from './person/person.route';
+import taxiRoutes from './taxi/taxi.route';
+import userRoutes from './user/user.route';
+import mechanicRoutes from './mechanic/mechanic.route';
+import subscriptionRoutes from './subscription/subscription.route';
+import planRoutes from './plan/plan.route';
 
 const router = express.Router();
 
-router.use('/planes', planeRoutes);
-router.use('/companies', companyRoutes);
-router.use('/persons', personRoutes);
+router.use('/taxies', taxiRoutes);
+router.use('/users', userRoutes);
+router.use('/mechanics', mechanicRoutes);
+router.use('/subscriptions', subscriptionRoutes);
+router.use('/plans', planRoutes);
 
 export default router;
